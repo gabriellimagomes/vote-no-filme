@@ -1,0 +1,7 @@
+*.class
+
+# Package Files #
+lib/*
+target/*
+*.war
+*.ear
