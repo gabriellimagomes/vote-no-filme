@@ -1,7 +1,11 @@
 *.class
+src/main/webapp/WEB-INF/classes/*
 
 # Package Files #
 lib/*
+src/main/webapp/WEB-INF/lib/*
 target/*
 *.war
 *.ear
+
+target/**/*
