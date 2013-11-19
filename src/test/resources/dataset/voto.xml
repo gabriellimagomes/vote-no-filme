@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<voto id="1" filme1_id="1" filme2_id="2" filmeVotado_id="1" usuario_id="1" />
+	<voto id="2" filme1_id="4" filme2_id="3" filmeVotado_id="3" usuario_id="1" />
+	<voto id="3" filme1_id="1" filme2_id="3" filmeVotado_id="1" usuario_id="1" />
+	<voto id="4" filme1_id="2" filme2_id="4" filmeVotado_id="2" usuario_id="1" />
+	<voto id="5" filme1_id="1" filme2_id="4" filmeVotado_id="1" usuario_id="1" />
+	<voto id="6" filme1_id="2" filme2_id="3" filmeVotado_id="2" usuario_id="1" />
+	<voto id="7" filme1_id="4" filme2_id="3" filmeVotado_id="4" usuario_id="2" />
+	<voto id="8" filme1_id="2" filme2_id="3" filmeVotado_id="2" usuario_id="2" />
+</dataset>

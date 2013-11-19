@@ -1,76 +1,96 @@
 package br.com.gabriel.filme.repositories;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.Assert.assertEquals;
 
-import org.hibernate.SessionFactory;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.com.gabriel.filme.models.Filme;
+import br.com.gabriel.filme.models.Ranking;
+import br.com.gabriel.filme.models.Usuario;
 
 import com.jintegrity.core.JIntegrity;
 import com.jintegrity.helper.HibernateHelper;
 
 public class VotoRepositoryImplTest {
 
-	private Filme filmeA;
-	private Filme filmeB;
-	private Filme filmeC;
-	private Filme filmeD;
-	private static SessionFactory sessionFactory;
+	private Filme filme1;
+	private Filme filme2;
+	private Filme filme3;
+	private Filme filme4;
+	private Filme filme5;
 	private VotoRepositoryImpl repository;
 	private JIntegrity helper = new JIntegrity();
-	
+
 	@BeforeClass
-	public static void beforeClass(){
+	public static void beforeClass() {
 		HibernateHelper.sessionFactory();
+		
 	}
-	
-	@AfterClass
-	public static void afterClass(){
-		//HibernateHelper.close();
-	}
-	
+
 	@Before
 	public void setUp() {
-		helper.path("dataset").cleanAndInsert("filme");
+		helper.path("dataset").cleanAndInsert("filme").cleanAndInsert("usuario").cleanAndInsert("voto");
 		repository = new VotoRepositoryImpl(HibernateHelper.currentSession());
+		
+		criaFilmes();
 	}
-	
+
+	private void criaFilmes() {
+		filme1 = new Filme(1L, "Filme A");
+		filme2 = new Filme(2L, "Filme B");
+		filme3 = new Filme(3L, "Filme C");
+		filme4 = new Filme(4L, "Filme D");
+		filme5 = new Filme(5L, "Filme E");
+	}
+
 	@After
-	public void tearDown(){
-		//HibernateHelper.close();
-        helper.clean();
+	public void tearDown() {
+		HibernateHelper.close();
+		helper.clean();
 	}
 
 	@Test
-	public void abc(){
-		System.out.println("VotoRepositoryImplTest.abc()");
+	public void deveApresentarRankingDosFilmesAtravesDosVotosGerais() {
+
+		assertEquals(criaRankingGeral(), repository.rankingGeral());
+
 	}
 	
-	public void deveApresentarRankingDosFilmesAtravesDosVotos() {
-
-		Map<Filme, Integer> rankingEsperado = new HashMap<Filme, Integer>();
-		rankingEsperado.put(filmeA, 3);
-		rankingEsperado.put(filmeB, 2);
-		rankingEsperado.put(filmeC, 1);
-		rankingEsperado.put(filmeD, 0);
-
-		/**
-		 * controller.votar(filmeA, filmeB, filmeA); controller.votar(filmeD,
-		 * filmeC, filmeC); controller.votar(filmeA, filmeC, filmeA);
-		 * controller.votar(filmeB, filmeD, filmeB); controller.votar(filmeA,
-		 * filmeD, filmeA); controller.votar(filmeB, filmeC, filmeB);
-		 * 
-		 * VotoRepository repository = new VotoRepositoryImpl();
-		 * 
-		 * Mockito.when(repository.ranking()).thenReturn(rankingEsperado);
-		 * 
-		 * assertEquals(rankingEsperado, controller.ranking());
-		 **/
+	@Test
+	public void deveApresentarRankingDosFilmesAtravesDosVotosDoUsuario() {
+		
+		Usuario usuario = new Usuario();
+		usuario.setId(1L);
+		
+		assertEquals(criaRankingDoUsuario(), repository.rankingPorUsuario(usuario));
+		
+	}
+	
+	private List<Ranking> criaRankingDoUsuario() {
+		List<Ranking> rankingEsperado = new ArrayList<Ranking>();
+		rankingEsperado.add(new Ranking(filme1, 3L));
+		rankingEsperado.add(new Ranking(filme2, 2L));
+		rankingEsperado.add(new Ranking(filme3, 1L));
+		rankingEsperado.add(new Ranking(filme4, 0L));
+		rankingEsperado.add(new Ranking(filme5, 0L));
+		
+		return rankingEsperado;
+	}
+	
+	private List<Ranking> criaRankingGeral() {
+		List<Ranking> rankingEsperado = new ArrayList<Ranking>();
+		rankingEsperado.add(new Ranking(filme1, 3L));
+		rankingEsperado.add(new Ranking(filme2, 3L));
+		rankingEsperado.add(new Ranking(filme3, 1L));
+		rankingEsperado.add(new Ranking(filme4, 1L));
+		rankingEsperado.add(new Ranking(filme5, 0L));
+		
+		return rankingEsperado;
 	}
 }

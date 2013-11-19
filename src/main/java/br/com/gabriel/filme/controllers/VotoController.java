@@ -1,13 +1,14 @@
 package br.com.gabriel.filme.controllers;
 
-import java.util.Map;
-import java.util.Set;
-
 import br.com.caelum.vraptor.Get;
+import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.gabriel.filme.exception.VotoInvalidoException;
+import br.com.gabriel.filme.models.Duelo;
+import br.com.gabriel.filme.models.DueloDisponivel;
 import br.com.gabriel.filme.models.Filme;
+import br.com.gabriel.filme.models.UsuarioSession;
 import br.com.gabriel.filme.models.Voto;
 import br.com.gabriel.filme.repositories.VotoRepository;
 
@@ -16,81 +17,49 @@ public class VotoController {
 
 	private final Result result;
 	private final VotoRepository repository;
+	private final DueloDisponivel dueloDisponivel;
+	private UsuarioSession usuarioSession;
 	
-	public VotoController(Result result, VotoRepository repository) {
+	public VotoController(Result result, VotoRepository repository, DueloDisponivel dueloDisponivel, UsuarioSession usuarioSession) {
 		this.result = result;
 		this.repository = repository;
+		this.dueloDisponivel = dueloDisponivel;
+		this.usuarioSession = usuarioSession;
 	}
 	
-	/**@Get("/votos")
-	public List<Voto> index() {
-		return repository.findAll();
-	}
-	
-	@Post("/votos")
-	public void create(Voto voto) {
-		validator.validate(voto);
-		validator.onErrorUsePageOf(this).newVoto();
-		repository.create(voto);
-		result.redirectTo(this).index();
-	}
-	
-	@Get("/votos/new")
-	public Voto newVoto() {
-		return new Voto();
-	}
-	
-	@Put("/votos")
-	public void update(Voto voto) {
-		validator.validate(voto);
-		validator.onErrorUsePageOf(this).edit(voto);
-		repository.update(voto);
-		result.redirectTo(this).index();
-	}
-	
-	@Get("/votos/{voto.id}/edit")
-	public Voto edit(Voto voto) {
-		
-		return repository.find(voto.getId());
-	}
-
-	@Get("/votos/{voto.id}")
-	public Voto show(Voto voto) {
-		return repository.find(voto.getId());
-	}
-
-	@Delete("/votos/{voto.id}")
-	public void destroy(Voto voto) {
-		repository.destroy(repository.find(voto.getId()));
-		result.redirectTo(this).index();  
-	}
-	 * @param filmeVotado2 
-	 * @param filmeB 
-**/
-	public void votar(Filme filmeA, Filme filmeB, Filme filmeVotado) {
-		Voto voto = new Voto(filmeA, filmeB, filmeVotado);
-		this.validaVoto(filmeA, filmeB, filmeVotado);
-		
-		repository.votar(voto);
-		result.forwardTo(this).index();
-	}
-
-	private void validaVoto(Filme filmeA, Filme filmeB, Filme filmeVotado) {
-		if (!filmeVotado.equals(filmeA) && !filmeVotado.equals(filmeB))
-			throw new VotoInvalidoException("Voto inválido");
-	}
-
-	public Map<Filme, Integer> ranking() {
-		return repository.ranking();
-	}
 
 	@Get("/")
 	public void index() {
-		Set<Filme> filmesParaDuelo = repository.getDoisFilmesAleatorios();
+		Duelo duelo = dueloDisponivel.duelo();
 		
-		int contFilme = 1;
-		for (Filme filme : filmesParaDuelo) {
-			result.include("filme".concat(String.valueOf(contFilme++)), filme);
+		result.include("filme1", duelo.getFilme1());
+		result.include("filme2", duelo.getFilme2());
+	}
+
+	@Post("/voto")
+	public void votar(Duelo duelo, Filme filmeVotado) {
+		
+		Voto voto = new Voto(duelo, filmeVotado, usuarioSession.getUsuario());
+		this.validaVoto(duelo, filmeVotado);
+		
+		
+		repository.votar(voto);
+		
+		if (!dueloDisponivel.temDuelo()){
+			result.redirectTo(UsuarioController.class).newUsuario();
+		}else{
+			result.redirectTo(this).index();
 		}
+	}
+	
+	public void ranking() {
+		
+		result.include("rankingUsuario", repository.rankingPorUsuario(usuarioSession.getUsuario()));
+		result.include("rankingGeral", repository.rankingGeral());
+	}
+	
+	private void validaVoto(Duelo duelo, Filme filmeVotado) {
+		if (!filmeVotado.equals(duelo.getFilme1()) && !filmeVotado.equals(duelo.getFilme2()))
+			throw new VotoInvalidoException("Voto inválido");
 	}
 }

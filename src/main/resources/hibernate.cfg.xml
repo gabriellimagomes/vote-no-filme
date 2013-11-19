@@ -5,5 +5,6 @@
 	<session-factory>
 		<mapping class='br.com.gabriel.filme.models.Filme'/>
 		<mapping class='br.com.gabriel.filme.models.Voto'/>
+		<mapping class='br.com.gabriel.filme.models.Usuario'/>
 	</session-factory>
 </hibernate-configuration>

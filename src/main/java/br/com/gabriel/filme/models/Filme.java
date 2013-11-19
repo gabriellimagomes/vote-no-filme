@@ -14,6 +14,10 @@ public class Filme extends Entity {
 		
 	}
 
+	public Filme(Long id) {
+		this.setId(id);
+	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -22,4 +26,9 @@ public class Filme extends Entity {
 		return nome;
 	}
 
+	@Override
+	public String toString() {
+		return "Filme [id= "+ getId() + ", nome= "+ nome + "]";
+	}
+	
 }

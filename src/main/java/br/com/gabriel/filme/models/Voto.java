@@ -8,14 +8,33 @@ public class Voto extends Entity {
 	@ManyToOne
 	private final Filme filmeVotado;
 	@ManyToOne
-	private final Filme filmeA;
+	private final Filme filme1;
 	@ManyToOne
-	private final Filme filmeB;
+	private final Filme filme2;
+	@ManyToOne
+	private final Usuario usuario;
 
-	public Voto(Filme filmeA, Filme filmeB, Filme filmeVotado) {
-		this.filmeA = filmeA;
-		this.filmeB = filmeB;
+	public Voto(Duelo duelo, Filme filmeVotado, Usuario usuario) {
+		this.filme1 = duelo.getFilme1();
+		this.filme2 = duelo.getFilme2();
 		this.filmeVotado = filmeVotado;
+		this.usuario = usuario;
+	}
+
+	public Filme getFilmeVotado() {
+		return filmeVotado;
+	}
+
+	public Filme getFilme1() {
+		return filme1;
+	}
+
+	public Filme getFilme2() {
+		return filme2;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
 }

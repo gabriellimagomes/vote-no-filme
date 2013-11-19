@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QUnit Example</title>
+  <link rel="stylesheet" href="libs/qunit/qunit-1.12.0.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+  	<form action="#">
+	  	<div id="filme1">
+	  		Filme 1
+	  		<button class="btn btn-primary" id="btnFilme1" data-id-filme="1"></button>
+	  	</div>
+	  	<div id="filme2">
+	  		Filme 2
+	  		<button class="btn btn-primary" id="btnFilme2" data-id-filme="2"></button>
+	  	</div>
+	  	<input id="hiddenFilmeVotado">
+  	</form>
+  </div>
+  
+  <script src="libs/jquery/jquery-1.10.2.min.js"></script>
+  
+  <script src="libs/qunit/qunit-1.12.0.js"></script>
+  
+  <script src="../usuario.js"></script>
+  <script src="unit/usuario.js"></script>
+</body>
+</html>
