@@ -2,12 +2,12 @@ package br.com.gabriel.filme.repositories;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import com.jintegrity.core.JIntegrity;
 import com.jintegrity.helper.HibernateHelper;
@@ -15,20 +15,30 @@ import com.jintegrity.helper.HibernateHelper;
 public class FilmeRepositoryImplTest {
 	
 	private JIntegrity helper = new JIntegrity();
-	@Mock
 	private FilmeRepository repository;
+	
+	@BeforeClass
+	public static void beforeClass() {
+		HibernateHelper.sessionFactory();
+	}
 
 	@Before
 	public void setUp() {
 		helper.path("dataset").cleanAndInsert("filme");
 		repository = new FilmeRepositoryImpl(HibernateHelper.currentSession());
 	}
+	
+	@After
+	public void tearDown() {
+		HibernateHelper.close();
+		helper.clean();
+	}
 
-    @Test 
+    @Test
     public void deveTrazerIdsFilmes() {
     	
     	List<Long> idsFilmesEsperados = criaIdsFilmes();
-		Set<Long> idsFilmesRecebidos = repository.getIdsFilmes();
+		List<Long> idsFilmesRecebidos = repository.getIdsFilmes();
 		
 		Assert.assertEquals(idsFilmesEsperados.size(), idsFilmesRecebidos.size());
 		

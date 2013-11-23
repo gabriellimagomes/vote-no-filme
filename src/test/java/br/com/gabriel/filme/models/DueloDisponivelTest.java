@@ -1,7 +1,9 @@
 package br.com.gabriel.filme.models;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -54,8 +56,8 @@ public class DueloDisponivelTest {
 		Assert.assertEquals(duelosDisponiveisEsperados.size(), tamanhoSet);
 	}
 
-	private Set<Long> criaIdsFilmes() {
-		Set<Long> idsFilmes = new HashSet<Long>();
+	private List<Long> criaIdsFilmes() {
+		List<Long> idsFilmes = new ArrayList<Long>();
 		idsFilmes.add(1L);
 		idsFilmes.add(2L);
 		idsFilmes.add(3L);

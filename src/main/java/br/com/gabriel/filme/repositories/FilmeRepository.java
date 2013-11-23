@@ -1,6 +1,6 @@
 package br.com.gabriel.filme.repositories;
 
-import java.util.Set;
+import java.util.List;
 
 import br.com.gabriel.filme.models.Filme;
 
@@ -8,6 +8,6 @@ public interface FilmeRepository {
 	
 	Filme find(Long id);
 	
-	Set<Long> getIdsFilmes();
+	List<Long> getIdsFilmes();
 
 }

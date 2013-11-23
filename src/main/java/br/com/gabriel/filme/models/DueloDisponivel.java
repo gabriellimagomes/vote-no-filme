@@ -3,6 +3,7 @@ package br.com.gabriel.filme.models;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -19,9 +20,11 @@ public class DueloDisponivel {
 	private final Iterator<Duelo> iteratorDuelos;
 	
 	public DueloDisponivel(FilmeRepository filmeRepository) {		
-		Set<Long> idsFilmes = filmeRepository.getIdsFilmes();
+		List<Long> idsFilmes = filmeRepository.getIdsFilmes();
 		
 		duelosDisponiveis = new HashSet<Duelo>();
+		
+		Collections.shuffle(idsFilmes);
 		
 		Combinacao combinacao = new Combinacao(idsFilmes.toArray(new Long[idsFilmes.size()]), 2);
 		Long[] idsDuelo;

@@ -1,7 +1,6 @@
 package br.com.gabriel.filme.repositories;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -20,8 +19,8 @@ public class FilmeRepositoryImpl
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Set<Long> getIdsFilmes() {
+	public List<Long> getIdsFilmes() {
 		Query createQuery = session.createQuery("select f.id from Filme f");
-		return new HashSet<Long>(createQuery.list());
+		return createQuery.list();
 	}
 }
