@@ -9,6 +9,10 @@
 	</path>
 	<path id="test.path.id">
 		<fileset dir="lib/test" />
+		<fileset dir="">
+			<include name="dbunit-2.4.8.jar" />
+			<include name="jintegrity.jar" />
+		</fileset>
 		<path refid="lib.path.id" />
 		<pathelement location="${test.build.dir}" />
 		<pathelement location="${build.dir}" />
