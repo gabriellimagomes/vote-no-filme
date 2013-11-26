@@ -1,5 +1,6 @@
 package br.com.gabriel.filme.models;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,7 +13,7 @@ import br.com.gabriel.filme.repositories.FilmeRepository;
 
 @SessionScoped
 @Component
-public class DueloDisponivel {
+public class DueloDisponivel implements Serializable {
 
 	private static final int INDEX_FILME_1 = 0;
 	private static final int INDEX_FILME_2 = 1;
