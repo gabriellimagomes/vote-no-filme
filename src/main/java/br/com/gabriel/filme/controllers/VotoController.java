@@ -62,6 +62,6 @@ public class VotoController {
 	
 	private void validaVoto(Duelo duelo, Filme filmeVotado) {
 		if (!filmeVotado.equals(duelo.getFilme1()) && !filmeVotado.equals(duelo.getFilme2()))
-			throw new VotoInvalidoException("Voto inválido");
+			throw new VotoInvalidoException("Voto invalido");
 	}
 }
