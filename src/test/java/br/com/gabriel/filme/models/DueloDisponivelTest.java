@@ -16,7 +16,7 @@ import org.mockito.MockitoAnnotations;
 import br.com.gabriel.filme.repositories.FilmeRepository;
 
 public class DueloDisponivelTest {
-	
+
 	@Mock
 	private FilmeRepository filmeRepository;
 
@@ -24,36 +24,45 @@ public class DueloDisponivelTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
 	public void devePegarProximoDueloDisponivel() {
-		
-		DueloDisponivel dueloVotado = new DueloDisponivel(filmeRepository);		
+
+		DueloDisponivel dueloVotado = new DueloDisponivel(filmeRepository);
 		Set<Duelo> duelosFeitos = new HashSet<Duelo>();
 		Duelo proximoDuelo;
-		
+
 		while(dueloVotado.temDuelo()){
 			proximoDuelo = dueloVotado.duelo();
 			Assert.assertFalse(duelosFeitos.contains(proximoDuelo));
 			duelosFeitos.add(proximoDuelo);
 		}
 	}
-	
+
 	@Test
 	public void deveTrazerCombinacoesDeFilmesPossiveisParaDuelos() {
-		
+
 		Set<Duelo> duelosDisponiveisEsperados = criaSetComDuelosDisponiveis();
-		
+
 		Mockito.when(filmeRepository.getIdsFilmes()).thenReturn(criaIdsFilmes());
 		DueloDisponivel dueloDisponivel = new DueloDisponivel(filmeRepository);
-		
-		
+
+
 		int tamanhoSet = 0;
 		while (dueloDisponivel.temDuelo()) {
 			Assert.assertTrue(duelosDisponiveisEsperados.contains(dueloDisponivel.duelo()));
 			tamanhoSet++;
 		}
 		Assert.assertEquals(duelosDisponiveisEsperados.size(), tamanhoSet);
+	}
+
+	@Test
+	public void deveColocarErroNoResultCasoNaoTenhaFilmesParaDuelo(){
+		when(dueloDisponivel.temDuelo()).thenReturn(false);
+
+		controller.index();
+
+		assertTrue("Deve retornar um erro na result", containsNoResult("erro"));
 	}
 
 	private List<Long> criaIdsFilmes() {
@@ -63,13 +72,13 @@ public class DueloDisponivelTest {
 		idsFilmes.add(3L);
 		idsFilmes.add(4L);
 		idsFilmes.add(5L);
-		
+
 		return idsFilmes;
 	}
 
 	private Set<Duelo> criaSetComDuelosDisponiveis() {
 		Set<Duelo> duelosDisponiveis = new HashSet<Duelo>();
-		
+
 		duelosDisponiveis.add(new Duelo(filmeRepository.find(1L), filmeRepository.find(2L)));
 		duelosDisponiveis.add(new Duelo(filmeRepository.find(1L), filmeRepository.find(3L)));
 		duelosDisponiveis.add(new Duelo(filmeRepository.find(1L), filmeRepository.find(4L)));
@@ -80,7 +89,7 @@ public class DueloDisponivelTest {
 		duelosDisponiveis.add(new Duelo(filmeRepository.find(3L), filmeRepository.find(4L)));
 		duelosDisponiveis.add(new Duelo(filmeRepository.find(3L), filmeRepository.find(5L)));
 		duelosDisponiveis.add(new Duelo(filmeRepository.find(4L), filmeRepository.find(5L)));
-		
+
 		return duelosDisponiveis;
 	}
 

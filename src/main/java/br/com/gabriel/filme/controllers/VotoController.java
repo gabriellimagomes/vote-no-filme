@@ -20,46 +20,50 @@ public class VotoController {
 	private final VotoRepository repository;
 	private final DueloDisponivel dueloDisponivel;
 	private UsuarioSession usuarioSession;
-	
+
 	public VotoController(Result result, VotoRepository repository, DueloDisponivel dueloDisponivel, UsuarioSession usuarioSession) {
 		this.result = result;
 		this.repository = repository;
 		this.dueloDisponivel = dueloDisponivel;
 		this.usuarioSession = usuarioSession;
 	}
-	
+
 
 	@Get
 	@Path(value = { "/vote-no-filme", "/" })
 	public void index() {
-		Duelo duelo = dueloDisponivel.duelo();
-		
-		result.include("filme1", duelo.getFilme1());
-		result.include("filme2", duelo.getFilme2());
+		if (!dueloDisponivel.temDuelo()){
+			result.include("erro", "Sem filmes para duelo");
+		}else{
+			Duelo duelo = dueloDisponivel.duelo();
+
+			result.include("filme1", duelo.getFilme1());
+			result.include("filme2", duelo.getFilme2());
+		}
 	}
 
 	@Post("/voto")
 	public void votar(Duelo duelo, Filme filmeVotado) {
-		
+
 		Voto voto = new Voto(duelo, filmeVotado, usuarioSession.getUsuario());
 		this.validaVoto(duelo, filmeVotado);
-		
-		
+
+
 		repository.votar(voto);
-		
+
 		if (!dueloDisponivel.temDuelo()){
 			result.redirectTo(UsuarioController.class).newUsuario();
 		}else{
 			result.redirectTo(this).index();
 		}
 	}
-	
+
 	public void ranking() {
-		
+
 		result.include("rankingUsuario", repository.rankingPorUsuario(usuarioSession.getUsuario()));
 		result.include("rankingGeral", repository.rankingGeral());
 	}
-	
+
 	private void validaVoto(Duelo duelo, Filme filmeVotado) {
 		if (!filmeVotado.equals(duelo.getFilme1()) && !filmeVotado.equals(duelo.getFilme2()))
 			throw new VotoInvalidoException("Voto invalido");
