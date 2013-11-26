@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import static org.mockito.Mockito.when; 
 import org.mockito.MockitoAnnotations;
 
 import br.com.gabriel.filme.repositories.FilmeRepository;
@@ -44,7 +44,7 @@ public class DueloDisponivelTest {
 
 		Set<Duelo> duelosDisponiveisEsperados = criaSetComDuelosDisponiveis();
 
-		Mockito.when(filmeRepository.getIdsFilmes()).thenReturn(criaIdsFilmes());
+		when(filmeRepository.getIdsFilmes()).thenReturn(criaIdsFilmes());
 		DueloDisponivel dueloDisponivel = new DueloDisponivel(filmeRepository);
 
 
@@ -57,12 +57,9 @@ public class DueloDisponivelTest {
 	}
 
 	@Test
-	public void deveColocarErroNoResultCasoNaoTenhaFilmesParaDuelo(){
-		when(dueloDisponivel.temDuelo()).thenReturn(false);
-
-		controller.index();
-
-		assertTrue("Deve retornar um erro na result", containsNoResult("erro"));
+	public void deveRetornarFalseCasoNaoTenhaDuelos(){
+		when(filmeRepository.getIdsFilmes()).thenReturn(new ArrayList<Long>());
+		Assert.assertFalse(new DueloDisponivel(filmeRepository).temDuelo());
 	}
 
 	private List<Long> criaIdsFilmes() {
