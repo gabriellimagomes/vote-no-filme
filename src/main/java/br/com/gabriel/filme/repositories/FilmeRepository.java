@@ -8,6 +8,8 @@ public interface FilmeRepository {
 	
 	Filme find(Long id);
 	
+	void create(Filme filme);
+	
 	List<Long> getIdsFilmes();
 
 }
