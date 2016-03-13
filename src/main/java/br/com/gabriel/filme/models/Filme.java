@@ -10,9 +10,8 @@ public class Filme extends Entity {
 		this.nome = nome;
 	}
 
-	public Filme() {
-		
-	}
+	@Deprecated //Hibernate eyes only
+	public Filme() {}
 
 	public Filme(Long id) {
 		this.setId(id);
